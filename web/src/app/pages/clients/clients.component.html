@@ -1,0 +1,117 @@
+<div class="head">
+  <h2>Клиенты</h2>
+  
+  <app-input class="search-input"
+    placeholder="Введите имя/телефон/код клиента"
+    rightIcon="search"
+    (changed)="searchClients($event);">
+  </app-input>
+</div>
+
+<div class="table">
+  <div class="thead">
+    <div class="th">Код</div>
+    <div class="th">Имя</div>
+    <div class="th">Телефон</div>
+    <div class="th">Долг</div>
+    <div class="th">Дата</div>
+    <div class="th status-th"></div>
+  </div>
+
+  <div *ngIf="PagesAccess.ClIENTS.add" class="tr">
+    <div class="td value">-</div>
+    <div class="td">
+      <app-input placeholder="Имя"
+        [form]="clientAddForm"
+        fieldName="name"
+        [required]="true">
+      </app-input>
+    </div>
+    <div class="td">
+      <app-input placeholder="Телефон"
+        [form]="clientAddForm"
+        fieldName="phone">
+      </app-input>
+    </div>
+    <div class="td value"></div>
+    <div class="td value"></div>
+    <div class="td btn-td">
+      <button nz-button nzType="primary"
+        (click)="add()"
+        [nzLoading]="isLoading"
+        [disabled]="clientAddForm.invalid">
+        <span nz-icon nzType="plus"></span>
+        Добавить
+      </button>
+      <button nz-button nzType="dashed"
+        (click)="clientAddForm.reset(); ">
+        <span nz-icon nzType="highlight" nzTheme="outline"></span>
+        Очистить
+      </button>
+    </div>
+  </div>
+
+  <div *ngFor="let client of clients"
+    class="tr edit-tr"
+    (click)="selectedClientId = client._id || ''">
+    <div class="td value">
+      {{ client.code }}
+    </div>
+
+    <div class="td common"
+      [class.value]="selectedClientId !== client._id">
+      @if (selectedClientId === client._id) {
+        <app-input placeholder="Имя"
+          [required]="true"
+          [value]="client.name"
+          (changed)="client.name = $event">
+        </app-input>
+      } @else {
+        {{ client.name }}
+      }
+    </div>
+
+    <div class="td"
+      [class.value]="selectedClientId !== client._id">
+      @if (selectedClientId === client._id) {
+        <app-input placeholder="Телефон"
+          [required]="true"
+          [value]="client.phone"
+          (changed)="client.phone = $event;">
+        </app-input>
+      } @else {
+        {{ client.phone }}
+      }
+    </div>
+
+    <div class="td"
+      [class.value]="selectedClientId !== client._id">
+        {{ client.debt || 0 | number:3 }}
+    </div>
+
+    <div class="td">
+        {{ client.createdAt | date: 'dd-MM-YYYY HH:mm' }}
+    </div>
+
+    <div class="td btn-td">
+      <button *ngIf="PagesAccess.ClIENTS.edit"
+        nz-button
+        nzType="primary"
+        (click)="edit(client)"
+        [nzLoading]="editLoading"
+        [disabled]="!client.name || !client.phone || selectedClientId !== client._id">
+        <span nz-icon nzType="edit"></span>
+        Изменить
+      </button>
+      <button *ngIf="PagesAccess.ClIENTS.delete"
+        nz-button
+        nzType="dashed"
+        nzDanger
+        (click)="remove(client)"
+        [nzLoading]="editLoading">
+        <span nz-icon nzType="delete"></span>
+        Удалить
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+<div class="account">
+  <div class="logo">
+    <img src="../../../assets/img/logo.png" alt="List CRM" width="200"/>
+    <h1>List CRM</h1>
+  </div>
+
+  <div class="form">
+    <app-input placeholder="Введите логин..."
+      icon="user"
+      [form]="loginForm"
+      fieldName="username"
+      [required]="true">
+    </app-input>
+
+    <app-input placeholder="Введите пароль..."
+      [type]="passwordVisible ? 'text' : 'password'"
+      icon="lock"
+      [rightIcon]="passwordVisible ? 'eye-invisible' : 'eye'"
+      (rightIconClick)="passwordVisible = !passwordVisible"
+      [form]="loginForm"
+      fieldName="password"
+      [required]="true">
+    </app-input>
+
+    <button nz-button nzType="primary"
+      (click)="login()"
+      [nzLoading]="isLoading"
+      [disabled]="loginForm.invalid">
+      <span nz-icon nzType="poweroff"></span>
+      Войти
+    </button>
+  </div>
+</div>

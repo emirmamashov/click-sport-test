@@ -1,0 +1,68 @@
+/* You can add global styles to this file, and also import other style files */
+@import "./assets/styles/variables.scss";
+
+// Table
+.table {
+  // border-radius: 5px;
+  margin-top: 20px;
+
+  .thead {
+    display: flex;
+    min-height: 13.462px;
+    padding: 0px 8.831px 0px 8.975px;
+    margin-bottom: 6px;
+    width: 100%;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 18px;
+
+    .th {
+      width: 25%;
+    }
+  }
+
+  .tr {
+    background: $light-grey;
+    display: flex;
+    padding: 0 3px 0 3px;
+    border-radius: 3px;
+    align-items: center;
+    margin-bottom: 3px;
+    gap: 3px;
+    min-height: 36px;
+    width: 100%;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+
+    .td {
+      width: 25%;
+      font-weight: 400;
+
+      nz-input-group {
+        border-radius: 3px;
+      }
+
+      nz-select {
+        width: 100%;
+      }
+    }
+
+    .value {
+      padding-left: 8px;
+    }
+
+    .btn-td {
+      display: flex;
+      gap: 3px;
+    }
+  }
+}
+
+label {
+  font-size: 12px;
+}
+
+.ant-input-affix-wrapper-disabled .ant-input[disabled] {
+  color: black;
+}

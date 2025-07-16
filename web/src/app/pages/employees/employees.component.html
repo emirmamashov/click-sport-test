@@ -1,0 +1,228 @@
+<h2>Сотрудники</h2>
+
+<div class="table">
+  <div class="thead">
+    <div class="th">Имя</div>
+    <div class="th">Логин</div>
+    <div class="th">Пароль</div>
+    <div class="th">Роль</div>
+    <div class="th">Филиал</div>
+    <div class="th">Телефон</div>
+    <!-- <div class="th">Email</div> -->
+    <div class="th">Город</div>
+    <div class="th status-th"></div>
+  </div>
+
+  <div *ngIf="PagesAccess.EMPOLOYEES.add" class="tr">
+    <div class="td">
+      <app-input placeholder="Имя"
+        [form]="userAddForm"
+        fieldName="name"
+        [required]="true"
+        type="text">
+      </app-input>
+    </div>
+    <div class="td">
+      <app-input placeholder="Логин"
+        [form]="userAddForm"
+        fieldName="username"
+        type="text">
+      </app-input>
+    </div>
+    <div class="td">
+      <app-input placeholder="Пароль"
+        [form]="userAddForm"
+        fieldName="password"
+        type="password">
+      </app-input>
+    </div>
+    <div class="td">
+      <nz-select
+        nzShowSearch
+        nzServerSearch
+        nzPlaceHolder="Выберите роль"
+        [(ngModel)]="selectedRoleId"
+        [nzFilterOption]="nzFilterOption"
+        (nzOnSearch)="searchRoles($event)"
+      >
+        <nz-option *ngFor="let role of roles" [nzLabel]="role.name" [nzValue]="role._id"></nz-option>
+      </nz-select>
+    </div>
+    <div class="td">
+      <nz-select
+        nzShowSearch
+        nzServerSearch
+        nzPlaceHolder="Выберите филиал"
+        [(ngModel)]="selectedFilialId"
+        [nzFilterOption]="nzFilterOption"
+        (nzOnSearch)="searchRoles($event)"
+      >
+        <nz-option *ngFor="let filial of filials" [nzLabel]="filial.name" [nzValue]="filial._id"></nz-option>
+      </nz-select>
+    </div>
+    <div class="td">
+      <app-input placeholder="Телефон"
+        [form]="userAddForm"
+        fieldName="phone">
+      </app-input>
+    </div>
+    <!-- <div class="td">
+      <app-input placeholder="Email"
+        [form]="userAddForm"
+        fieldName="email">
+      </app-input>
+    </div> -->
+    <div class="td">
+      <nz-select
+        nzShowSearch
+        nzServerSearch
+        nzPlaceHolder="Введите город"
+        [(ngModel)]="selectedCityId"
+        [nzFilterOption]="nzFilterOption"
+        (nzOnSearch)="searchCities($event)"
+      >
+        <nz-option *ngFor="let city of cities" [nzLabel]="city.name" [nzValue]="city._id"></nz-option>
+      </nz-select>
+    </div>
+    <div class="td status-td btn-td">
+      <button nz-button nzType="primary"
+        (click)="add()"
+        [nzLoading]="isLoading"
+        [disabled]="userAddForm.invalid">
+        <span nz-icon nzType="plus"></span>
+        Добавить
+      </button>
+      <button nz-button nzType="dashed"
+        (click)="userAddForm.reset(); reset();">
+        <span nz-icon nzType="highlight" nzTheme="outline"></span>
+        Очистить
+      </button>
+    </div>
+  </div>
+
+  <div *ngFor="let employee of employees"
+    class="tr edit-tr"
+    (click)="selectEmployee(employee)">
+    <div class="td common"
+      [class.value]="selectedEmployeeId !== employee._id">
+      @if (selectedEmployeeId === employee._id) {
+        <app-input placeholder="Имя"
+          [value]="selectedUser.name"
+          (changed)="selectedUser.name = $event;">
+        </app-input>
+      } @else {
+        {{ employee.userId.name }}
+      }
+    </div>
+
+    <div class="td"
+      [class.value]="selectedEmployeeId !== employee._id">
+      @if (selectedEmployeeId === employee._id) {
+        <app-input placeholder="Логин"
+          [value]="selectedUser.username"
+          (changed)="selectedUser.username = $event;">
+        </app-input>
+      } @else {
+        {{ employee.userId.username }}
+      }
+    </div>
+
+    <div class="td"
+      [class.value]="selectedEmployeeId !== employee._id">
+      @if (selectedEmployeeId === employee._id) {
+        <app-input placeholder="Введите новый"
+          [value]="selectedUser.password"
+          (changed)="selectedUser.password = $event;">
+        </app-input>
+      } @else {
+        *******
+      }
+    </div>
+
+    <div class="td"
+      [class.value]="selectedEmployeeId !== employee._id">
+      @if (selectedEmployeeId === employee._id) {
+        <nz-select
+          nzShowSearch
+          nzServerSearch
+          nzPlaceHolder="Выберите роль"
+          [(ngModel)]="selectedRoleId"
+          [nzFilterOption]="nzFilterOption"
+          (nzOnSearch)="searchRoles($event)"
+        >
+          <nz-option *ngFor="let role of roles" [nzLabel]="role.name" [nzValue]="role._id"></nz-option>
+        </nz-select>
+      } @else {
+        {{ employee.roleId.name }}
+      }
+    </div>
+
+    <div class="td"
+      [class.value]="selectedEmployeeId !== employee._id">
+      @if (selectedEmployeeId === employee._id) {
+        <nz-select
+          nzShowSearch
+          nzServerSearch
+          nzPlaceHolder="Выберите филиал"
+          [(ngModel)]="selectedFilialId"
+          [nzFilterOption]="nzFilterOption"
+          (nzOnSearch)="searchRoles($event)"
+        >
+          <nz-option *ngFor="let filial of filials" [nzLabel]="filial.name" [nzValue]="filial._id"></nz-option>
+        </nz-select>
+      } @else {
+        {{ employee.filialId.name }}
+      }
+    </div>
+
+    <div class="td"
+      [class.value]="selectedEmployeeId !== employee._id">
+      @if (selectedEmployeeId === employee._id) {
+        <app-input placeholder="Телефон"
+          [value]="selectedUser.phone"
+          (changed)="selectedUser.phone = $event;">
+        </app-input>
+      } @else {
+        {{ employee.userId.phone }}
+      }
+    </div>
+
+    <div class="td"
+      [class.value]="selectedEmployeeId !== employee._id">
+      @if (selectedEmployeeId === employee._id) {
+        <nz-select
+          nzShowSearch
+          nzServerSearch
+          nzPlaceHolder="Выберите город"
+          [(ngModel)]="selectedCityId"
+          [nzFilterOption]="nzFilterOption"
+          (nzOnSearch)="searchCities($event)"
+        >
+          <nz-option *ngFor="let city of cities" [nzLabel]="city.name" [nzValue]="city._id"></nz-option>
+        </nz-select>
+      } @else {
+        {{ employee.userId?.cityId.name }}
+      }
+    </div>
+
+    <div class="td btn-td">
+      <button *ngIf="PagesAccess.EMPOLOYEES.edit"
+        nz-button
+        nzType="primary"
+        (click)="edit(employee)"
+        [nzLoading]="editLoading">
+        <span nz-icon nzType="edit"></span>
+        Изменить
+      </button>
+      <button *ngIf="PagesAccess.EMPOLOYEES.delete"
+        nz-button
+        nzType="dashed"
+        nzDanger
+        (click)="remove(employee)"
+        [nzLoading]="editLoading">
+        <span nz-icon nzType="delete"></span>
+        Удалить
+      </button>
+    </div>
+  </div>
+</div>

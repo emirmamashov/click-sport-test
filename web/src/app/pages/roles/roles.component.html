@@ -1,0 +1,136 @@
+<h2>Роли</h2>
+
+<div class="table">
+  <div class="thead">
+    <div class="th">Наименование</div>
+    <div class="th">Описание</div>
+    <div class="th status-th"></div>
+  </div>
+
+  <div *ngIf="PagesAccess.ROLES.add" class="tr">
+    <div class="td">
+      <app-input placeholder="Имя"
+        [form]="roleAddForm"
+        fieldName="name"
+        [required]="true">
+      </app-input>
+    </div>
+    <div class="td">
+      <app-input placeholder="Описание"
+        [form]="roleAddForm"
+        fieldName="description">
+      </app-input>
+    </div>
+    <div class="td status-td">
+      <button nz-button nzType="primary"
+        (click)="add()"
+        [nzLoading]="isLoading"
+        [disabled]="roleAddForm.invalid">
+        <span nz-icon nzType="plus"></span>
+        Добавить
+      </button>
+    </div>
+  </div>
+
+  <div *ngFor="let role of roles"
+    class="tr edit-tr"
+    (click)="selectedRole = role">
+    <div class="td"
+      [class.value]="selectedRole?._id !== role._id">
+      @if (selectedRole?._id === role._id) {
+        <app-input placeholder="Имя"
+          [required]="true"
+          [value]="role.name"
+          (changed)="role.name = $event">
+        </app-input>
+      } @else {
+        {{ role.name }}
+      }
+    </div>
+
+    <div class="td"
+      [class.value]="selectedRole?._id !== role._id">
+      @if (selectedRole?._id === role._id) {
+        <app-input placeholder="Телефон"
+          [required]="true"
+          [value]="role.description"
+          (changed)="role.description = $event;">
+        </app-input>
+      } @else {
+        {{ role.description }}
+      }
+    </div>
+
+    <div class="td btn-td">
+      <button *ngIf="PagesAccess.ROLES.edit"
+        nz-button
+        nzType="primary"
+        (click)="edit(role)"
+        [nzLoading]="editLoading"
+        [disabled]="!role.name || selectedRole?._id !== role._id">
+        <span nz-icon nzType="edit"></span>
+        Изменить
+      </button>
+      <button *ngIf="PagesAccess.ROLES.edit"
+        nz-button
+        nzType="dashed"
+        (click)="isVisibleAccessModal = true"
+        [nzLoading]="editLoading">
+        <span nz-icon nzType="snippets" nzTheme="outline"></span>
+        Доступы
+      </button>
+      <button *ngIf="PagesAccess.ROLES.delete"
+        nz-button
+        nzType="dashed"
+        nzDanger
+        (click)="remove(role)"
+        [nzLoading]="editLoading">
+        <span nz-icon nzType="delete"></span>
+        Удалить
+      </button>
+    </div>
+  </div>
+</div>
+
+<nz-modal [(nzVisible)]="isVisibleAccessModal"
+  nzTitle="Доступы"
+  [nzFooter]="modalFooter"
+  [nzWidth]="700"
+  (nzOnCancel)="isVisibleAccessModal = false">
+  <ng-container *nzModalContent>
+    <div class="table">
+      <div class="thead">
+        <div class="th">Страница</div>
+        <div class="th">Просмотр</div>
+        <div class="th">Редактирование</div>
+        <div class="th">Добавление</div>
+        <div class="th">Удаление</div>
+      </div>
+
+      <div *ngFor="let access of selectedRole?.accesses"
+        class="tr">
+        <div class="td value">{{ access.pageTitle }}</div>
+        <div class="td value">
+          <label *ngIf="access.page !== PAGES.ORDER" nz-checkbox [(ngModel)]="access.read"></label>
+        </div>
+        <div class="td value">
+          <label *ngIf="access.page !== PAGES.STATISTICS && access.page !== PAGES.ORDER" nz-checkbox [(ngModel)]="access.edit"></label>
+        </div>
+        <div class="td value">
+          <label *ngIf="access.page !== PAGES.STATISTICS" nz-checkbox [(ngModel)]="access.add"></label>
+        </div>
+        <div class="td value">
+          <label *ngIf="access.page !== PAGES.STATISTICS && access.page !== PAGES.ORDER" nz-checkbox [(ngModel)]="access.delete"></label>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="isVisibleAccessModal = false">Отмена</button>
+    <button nz-button nzType="primary" (click)="edit(selectedRole)"
+      [nzLoading]="editLoading">
+      Сохранить
+    </button>
+  </ng-template>
+</nz-modal>

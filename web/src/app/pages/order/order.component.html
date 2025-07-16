@@ -1,0 +1,234 @@
+<h2>Оформления нового заказа</h2>
+
+<div class="btn-group">
+  <button nz-button
+    nzType="dashed"
+    (click)="reset()">
+    <span nz-icon nzType="plus-circle"></span>
+    Новый заказ
+  </button>
+
+  <button nz-button nzType="primary"
+    (click)="save(order)"
+    [nzLoading]="saveLoading"
+    [disabled]="!order.details.length || !order.totalCurrencySum.length">
+    <span nz-icon nzType="save" nzTheme="outline"></span>
+    Сохранить
+  </button>
+
+  <button *ngIf="order?._id"
+    nz-button
+    nzType="default"
+    (click)="showCheck(order);">
+    <span nz-icon nzType="coffee"></span>
+    Печать
+  </button>
+</div>
+
+<div class="order">
+  <div class="first-block">
+    <app-input placeholder="Номер"
+      label="Номер:"
+      [disabled]="true"
+      class="number"
+      [value]="order.checkNumber">
+    </app-input>
+
+    <app-input placeholder="Дата заказа"
+      label="Дата заказа:"
+      [disabled]="true"
+      [value]="order.createdAt | date: 'dd-MM-YYYY HH:mm'">
+    </app-input>
+
+    <app-input placeholder="Введите код/имя/телефон"
+      label="Поиск по коду:"
+      rightIcon="search"
+      class="search-clients"
+      (entered)="searchClients($event);">
+    </app-input>
+
+    <div class="select-city">
+      <label>
+        Город:
+      </label>
+
+      <nz-select
+        nzShowSearch
+        nzServerSearch
+        nzPlaceHolder="Введите город"
+        [(ngModel)]="order.cityId"
+        [nzFilterOption]="nzFilterOption"
+        (nzOnSearch)="searchCities($event)"
+      >
+        <nz-option *ngFor="let city of cities" [nzLabel]="city.name" [nzValue]="city._id"></nz-option>
+      </nz-select>
+    </div>
+
+    <div class="select-filial">
+      <label>
+        Филиал(Офис):
+      </label>
+
+      <nz-select
+        nzShowSearch
+        nzServerSearch
+        nzPlaceHolder="Выберите филиал"
+        [(ngModel)]="order.filialId"
+        [nzFilterOption]="nzFilterOption"
+        (nzOnSearch)="searchFilials($event)"
+      >
+        <nz-option *ngFor="let filial of filials" [nzLabel]="filial.name" [nzValue]="filial._id"></nz-option>
+      </nz-select>
+    </div>
+  </div>
+
+  <div class="second-block">
+    <app-input placeholder="Код"
+      label="Код:"
+      [disabled]="true"
+      [value]="order.client.code"
+      class="code">
+    </app-input>
+
+    <div class="client">
+      <div class="client-inputs">
+        <app-input placeholder="Клиент"
+          label="Клиент:"
+          class="client"
+          [value]="order.client.name"
+          (changed)="changeClientName($event);">
+        </app-input>
+        <app-input placeholder="Телефон"
+          label="Телефон:"
+          class="client"
+          [value]="order.client.phone"
+          (changed)="changeClientPhone($event);">
+        </app-input>
+      </div>
+      <button *ngIf="changedClientName"
+        nz-button
+        nzType="dashed"
+        (click)="addNewClient(order)"
+        [nzLoading]="addNewClientLoading">
+        <span nz-icon nzType="plus"></span>
+        Добавить клиента
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="table">
+  <div class="thead">
+    <div class="th th-number">№</div>
+    <div class="th">Продажа/Покупка</div>
+    <div class="th">Валюта</div>
+    <div class="th">Сумма</div>
+    <div class="th">Оменять на валюту</div>
+    <div class="th">Обменяемая сумма</div>
+    <div class="th">Статус оплаты</div>
+    <div class="th status-th"></div>
+  </div>
+
+  <div *ngFor="let orderDetail of order.details; let i=index" class="tr">
+    <div class="td td-number">
+      <app-input placeholder="№"
+        [value]="orderDetail.number"
+        (changed)="orderDetail.number = $event"
+        type="number">
+      </app-input>
+    </div>
+    <div class="td sell-buy-td">
+      <span [class.active]="!orderDetail.selectedType" (click)="orderDetail.selectedType=false">Продажа</span>
+      <nz-switch [(ngModel)]="orderDetail.selectedType"></nz-switch>
+      <span [class.active]="orderDetail.selectedType" (click)="orderDetail.selectedType=true">Покупка</span>
+    </div>
+    <div class="td">
+      <nz-select
+        nzShowSearch
+        nzServerSearch
+        nzPlaceHolder="Выберите валюту"
+        [(ngModel)]="orderDetail.clientCurrencyId"
+        [nzFilterOption]="nzFilterOption"
+        (ngModelChange)="changeSelectedClientCurrencyId(orderDetail, i);"
+      >
+        <nz-option *ngFor="let currency of currencies" [nzLabel]="currency.name" [nzValue]="currency._id"></nz-option>
+      </nz-select>
+    </div>
+    <div class="td">
+      <app-input placeholder="Сумма"
+        [required]="true"
+        [value]="orderDetail.sum"
+        (changed)="detailChangeSum($event, orderDetail, i)"
+        type="number">
+      </app-input>
+    </div>
+    <div class="td">
+      <nz-select
+        nzShowSearch
+        nzServerSearch
+        nzPlaceHolder="Выберите валюту"
+        [(ngModel)]="orderDetail.exchangeCurrencyId"
+        [nzFilterOption]="nzFilterOption"
+        [disabled]="!orderDetail.sum || !orderDetail.clientCurrencyId || eachangeAvailableCurrencies.length < 2"
+        (ngModelChange)="changeSelectedExchangeCurrencyId(orderDetail, i);"
+      >
+        <nz-option *ngFor="let currency of eachangeAvailableCurrencies" [nzLabel]="currency.name" [nzValue]="currency._id"></nz-option>
+      </nz-select>
+    </div>
+    <div class="td">
+      <app-input placeholder="Обменяемая сумма"
+        [required]="true"
+        type="number"
+        [disabled]="true"
+        [value]="orderDetail.exchangeSum">
+      </app-input>
+    </div>
+    <div class="td sell-buy-td">
+      <span [class.active]="!orderDetail.paid" (click)="orderDetail.paid=false">Не оплачено</span>
+      <nz-switch [(ngModel)]="orderDetail.paid"></nz-switch>
+      <span [class.active]="orderDetail.paid" (click)="orderDetail.paid=true">Оплачено</span>
+    </div>
+    <div class="td btn-td">
+      <button nz-button nzType="primary"
+        (click)="addDetail(orderDetail)"
+        [disabled]="!orderDetail || !orderDetail.clientCurrencyId || !orderDetail.exchangeCurrencyId
+        || !orderDetail.exchangeSum || !orderDetail.sum || !orderDetail.number || (order.details.length-1 !== i)">
+        <span nz-icon nzType="plus"></span>
+        Добавить
+      </button>
+      <button nz-button nz-dropdown [nzDropdownMenu]="menu">
+        <span nz-icon nzType="menu"></span>
+      </button>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu>
+          <li nz-menu-item (click)="resetOrderDetail(orderDetail);">
+            <span nz-icon nzType="highlight" nzTheme="outline"></span>
+            Очистить
+          </li>
+          <li *ngIf="i !== 0" nz-menu-item (click)="removeOrderDetail(orderDetail);">
+            <span nz-icon nzType="delete"></span>
+            Удалить
+          </li>
+        </ul>
+      </nz-dropdown-menu>
+    </div>
+  </div>
+
+  <div class="tr tr-total">
+    <div class="td-number"></div>
+    <div class="td"></div>
+    <div class="td td-total">
+      <b>Итого: </b>
+    </div>
+    <div class="td">
+      <div *ngFor="let total of order.totalCurrencySum">
+        <b>{{ total.sum }}</b> {{ total.currency.name }}
+      </div>
+    </div>
+    <div class="td">
+
+    </div>
+    <div class="td"></div>
+    <div class="td td-status"></div>
+  </div>
+</div>

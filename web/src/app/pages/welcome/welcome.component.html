@@ -1,0 +1,86 @@
+<div class="stats">
+  <!-- <div class="stats-block">
+    <div class="head">
+      <h3>Статистика продаж за сегодня: </h3>
+    </div>
+    <nz-row [nzGutter]="16">
+      <nz-col [nzSpan]="4">
+        <nz-statistic [nzValue]="(currentDate | date : 'dd-MMMM-YYYY') || ''" [nzTitle]="'Сегодня'"></nz-statistic>
+      </nz-col>
+      <nz-col [nzSpan]="4">
+        <nz-statistic [nzValue]="currenciesStat?.ordersCount || 0" [nzTitle]="'Заказы'"></nz-statistic>
+      </nz-col>
+      <nz-col *ngFor="let currencyData of currenciesStat?.currencyStat" [nzSpan]="4">
+        <nz-statistic [nzValue]="currencyData.sum" [nzTitle]="currencyData.currency.name"></nz-statistic>
+      </nz-col>
+    </nz-row>
+  </div> -->
+
+  <div class="stats-block">
+    <h3>Касса: </h3>
+
+    <nz-row [nzGutter]="16">
+      <nz-col [nzSpan]="4">
+        <nz-statistic [nzValue]="(currentDate | date : 'dd-MMMM-YYYY') || ''" [nzTitle]="'Сегодня'"></nz-statistic>
+      </nz-col>
+      <nz-col [nzSpan]="4">
+        <nz-statistic [nzValue]="chartData?.ordersCount || 0" [nzTitle]="'Заказы'"></nz-statistic>
+      </nz-col>
+      <nz-col *ngFor="let currencyData of currencies" [nzSpan]="4">
+        <nz-statistic nzValue="{{ currencyData.currentValue | numseparator }}" [nzTitle]="currencyData.name"></nz-statistic>
+      </nz-col>
+    </nz-row>
+  </div>
+</div>
+
+<div class="charts-block">
+  <div *ngIf="PagesAccess.STATISTICS.read" class="charts">
+    <div class="head">
+      <h3>Продажи:</h3>
+      <nz-radio-group [(ngModel)]="typeChart"
+        (ngModelChange)="selectChartType($event)">
+        <label nz-radio-button nzValue="day">День</label>
+        <label nz-radio-button nzValue="week">Неделя</label>
+        <label nz-radio-button nzValue="month">Месяц</label>
+      </nz-radio-group>
+    </div>
+
+    <canvas *ngIf="!loadChartData" id="chart">
+    </canvas>
+
+    <!-- <nz-table #basicTable [nzData]="[chartData]" nzShowPagination="false">
+      <thead>
+        <tr>
+          <th>Заказы</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{chartData?.ordersCount}}</td>
+        </tr>
+      </tbody>
+    </nz-table> -->
+  </div>
+
+  <div class="currencies">
+    <div class="head">
+      <h3>Курс: </h3>
+    </div>
+    <nz-table #basicTable [nzData]="currencies" nzShowPagination="false">
+      <thead>
+        <tr>
+          <th>Наименование</th>
+          <th>Покупка</th>
+          <th>Продажа</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of currencies">
+          <td>{{data.name}}</td>
+          <td>{{data.buyValue}}</td>
+          <td>{{data.sellValue}}</td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </div>
+</div>

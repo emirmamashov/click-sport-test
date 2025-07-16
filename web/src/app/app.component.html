@@ -1,0 +1,45 @@
+<nz-layout class="app-layout">
+  <nz-sider
+    nzCollapsible
+    nzWidth="256px"
+    nzBreakpoint="md"
+    [(nzCollapsed)]="isCollapsed"
+    [nzTrigger]="null">
+    <div class="sidebar-logo">
+      <a routerLink="/">
+        <img src="../assets/img/clicksport.png" alt="logo" />
+        <h1>ClickSport</h1>
+      </a>
+    </div>
+    <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
+      <li nz-menu-item nzMatchRouter routerLink="/shopping-list">
+        <span nz-icon nzType="ordered-list"></span>
+        <span>Список покупок</span>
+      </li>
+    </ul>
+  </nz-sider>
+
+  <nz-layout>
+    <nz-header>
+      <div class="app-header">
+        <span class="header-trigger"
+          (click)="isCollapsed = !isCollapsed">
+          <span class="trigger"
+            nz-icon
+            [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'">
+          </span>
+        </span>
+      </div>
+
+      <h2>ClickSport</h2>
+    </nz-header>
+
+    <nz-content>
+      <div class="inner-content">
+        <router-outlet></router-outlet>
+      </div>
+    </nz-content>
+
+    <nz-footer>Copyright ©2025 <strong>ClickSport</strong></nz-footer>
+  </nz-layout>
+</nz-layout>

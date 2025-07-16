@@ -1,0 +1,13 @@
+@import "../../../assets/styles/variables.scss";
+
+.edit-tr {
+  cursor: pointer;
+}
+
+.table {
+  .tr {
+    .value {
+      padding-left: 8px;
+    }
+  }
+}

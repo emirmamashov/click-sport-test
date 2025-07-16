@@ -1,0 +1,131 @@
+<h2>Валюты</h2>
+
+<div class="table">
+  <div class="thead">
+    <div class="th">Наименование</div>
+    <div class="th">Покупка</div>
+    <div class="th">Продажа</div>
+    <div class="th">Касса</div>
+    <div class="th status-th"></div>
+  </div>
+
+  <div *ngIf="PagesAccess.CURRENCIES.add" class="tr">
+    <div class="td">
+      <app-input placeholder="Наименование"
+        [form]="currencyAddForm"
+        fieldName="name"
+        [required]="true">
+      </app-input>
+    </div>
+    <div class="td">
+      <app-input placeholder="Покупка"
+        [form]="currencyAddForm"
+        fieldName="buyValue"
+        [required]="true">
+      </app-input>
+    </div>
+    <div class="td">
+      <app-input placeholder="Продажа"
+        [form]="currencyAddForm"
+        fieldName="sellValue"
+        [required]="true">
+      </app-input>
+    </div>
+    <div class="td">
+      <app-input placeholder="Касса"
+        [form]="currencyAddForm"
+        fieldName="currentValue"
+        [required]="true"
+        [disabled]="!isOwner">
+      </app-input>
+    </div>
+    <div class="td status-td">
+      <button nz-button nzType="primary"
+        (click)="add()"
+        [nzLoading]="isLoading"
+        [disabled]="currencyAddForm.invalid">
+        <span nz-icon nzType="plus"></span>
+        Добавить
+      </button>
+    </div>
+  </div>
+
+  <div *ngFor="let currency of currencies"
+    class="tr edit-tr"
+    (click)="selectedCurrencyId = currency._id || ''">
+
+    <div class="td common"
+      [class.value]="selectedCurrencyId !== currency._id">
+      @if (selectedCurrencyId === currency._id) {
+        <app-input placeholder="Наименование"
+          [required]="true"
+          [value]="currency.name"
+          (changed)="currency.name = $event">
+        </app-input>
+      } @else {
+        {{ currency.name }}
+      }
+    </div>
+
+    <div class="td"
+      [class.value]="selectedCurrencyId !== currency._id">
+      @if (selectedCurrencyId === currency._id) {
+        <app-input placeholder="Покупка"
+          [required]="true"
+          [value]="currency.buyValue"
+          (changed)="currency.buyValue = $event;">
+        </app-input>
+      } @else {
+        {{ currency.buyValue }}
+      }
+    </div>
+
+    <div class="td"
+      [class.value]="selectedCurrencyId !== currency._id">
+      @if (selectedCurrencyId === currency._id) {
+        <app-input placeholder="Продажа"
+          [required]="true"
+          [value]="currency.sellValue"
+          (changed)="currency.sellValue = $event;">
+        </app-input>
+      } @else {
+        {{ currency.sellValue }}
+      }
+    </div>
+
+    <div class="td"
+      [class.value]="selectedCurrencyId !== currency._id">
+      @if (selectedCurrencyId === currency._id && isOwner) {
+        <app-input placeholder="Касса"
+          [required]="true"
+          [value]="currency.currentValue"
+          [disabled]="true">
+        </app-input>
+      } @else {
+        {{ currency.currentValue }}
+      }
+    </div>
+
+    <div class="td btn-td">
+      <button *ngIf="PagesAccess.CURRENCIES.edit"
+        nz-button
+        nzType="primary"
+        (click)="edit(currency)"
+        [nzLoading]="editLoading"
+        [disabled]="!currency.name || !currency.sellValue || !currency.buyValue || selectedCurrencyId !== currency._id">
+        <span nz-icon nzType="edit"></span>
+        Изменить
+      </button>
+
+      <button *ngIf="!currency.isBase && PagesAccess.CURRENCIES.delete"
+        nz-button
+        nzType="dashed"
+        nzDanger
+        (click)="remove(currency)"
+        [nzLoading]="editLoading">
+        <span nz-icon nzType="delete"></span>
+        Удалить
+      </button>
+    </div>
+  </div>
+</div>

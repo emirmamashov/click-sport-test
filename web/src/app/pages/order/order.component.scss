@@ -1,0 +1,113 @@
+.btn-group {
+  display: flex;
+  gap: 5px;
+}
+
+.order {
+  margin-top: 15px;
+  border: 1px dashed #e9e9e9;
+  border-radius: 6px;
+  background-color: #fafafa;
+  text-align: center;
+  padding: 5px;
+  min-width: 620px;
+
+  .first-block {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    .number {
+      width: 100px;
+    }
+
+    .search-clients {
+      width: 300px;
+    }
+
+    .select-city, .select-filial {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+
+      nz-select {
+        width: 170px;
+      }
+    }
+  }
+
+  .second-block {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    .code {
+      width: 100px;
+    }
+
+    .client {
+      display: flex;
+      gap: 1px;
+      align-items: end;
+
+      &-inputs {
+        display: flex;
+        gap: 3px;
+      }
+
+      app-input {
+        display: block;
+      }
+    }
+  }
+}
+
+.table {
+  min-width: 800px;
+  
+  .thead {
+    .th-number {
+      width: 80px;
+    }
+  }
+
+  .tr {
+    .sell-buy-td {
+      font-size: 10px;
+      font-weight: 400;
+      gap: 3px;
+      display: flex;
+
+      span {
+        cursor: pointer;
+      }
+
+      .active {
+        color: #1890ff;
+        font-weight: 500;
+      }
+    }
+
+    .btn-td {
+      gap: 1px;
+    }
+
+    .td-number {
+      width: 80px;
+    }
+
+    .td-total {
+      text-align: end;
+      padding-right: 10px;
+    }
+  }
+
+  .tr-total {
+    height: auto;
+  }
+}
+
+.ant-modal-content {
+  height: 100%;
+  box-shadow: none;
+}

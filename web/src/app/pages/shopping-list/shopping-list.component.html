@@ -1,0 +1,104 @@
+<h2>Shipping list</h2>
+
+<div class="table">
+  <div class="tr">
+    <div class="td">
+      <app-input placeholder="Name"
+        [form]="shoppingItemForm"
+        fieldName="name"
+        [required]="true"
+        type="string">
+      </app-input>
+    </div>
+    <div class="td">
+      <app-input placeholder="Description"
+        [form]="shoppingItemForm"
+        fieldName="description"
+        type="string">
+      </app-input>
+    </div>
+    <div class="td">
+      <app-input placeholder="price"
+        [form]="shoppingItemForm"
+        fieldName="price"
+        [required]="true"
+        type="number">
+      </app-input>
+    </div>
+    <div class="td status-td">
+      <button nz-button nzType="primary"
+        (click)="add()"
+        [nzLoading]="isLoading"
+        [disabled]="shoppingItemForm.invalid">
+        <span nz-icon nzType="plus"></span>
+        Add
+      </button>
+    </div>
+  </div>
+
+  <!-- <div *ngFor="let item of shoppingList"
+    class="tr edit-tr">
+
+    <div class="td common">
+      {{ item.name }}
+    </div>
+
+    <div class="td">
+      {{ item.price }}
+    </div>
+    <div class="td">
+      {{ item.description }}
+    </div>
+
+    <div class="td btn-td">
+      <button nz-button
+        nzType="dashed"
+        nzDanger
+        [nzLoading]="removeLoading"
+        nz-popconfirm 
+        nzPopconfirmTitle="Are you sure?"
+        (nzOnConfirm)="remove(item)">
+        <span nz-icon nzType="delete"></span>
+        Delete
+      </button>
+    </div>
+  </div> -->
+
+  <div class="shopping-list">
+    <div class="card" *ngFor="let item of shoppingList">
+      <nz-card
+        style="width:100%;"
+        [nzTitle]="item.name" 
+        [nzExtra]="extraTemplate">
+        <div class="item">
+          <b>Name:</b><br/>
+          {{ item.name }}
+        </div>
+        <div class="item">
+          <b>Description:</b><br/>
+          {{ item.description }}
+        </div>
+        <div class="item">
+          <b>Price:</b><br/>
+          {{ item.price }}$
+        </div>
+        <div class="item">
+          <b>Creation date:</b><br/>
+          {{ item.createdAt | date: 'd/MM/yy, h:mm a' }}
+        </div>
+      </nz-card>
+      <ng-template #extraTemplate>
+        <button nz-button
+          nzType="dashed"
+          nzDanger
+          [nzLoading]="removeLoading"
+          nz-popconfirm 
+          nzPopconfirmTitle="Are you sure?"
+          (nzOnConfirm)="remove(item)">
+          <span nz-icon nzType="delete"></span>
+          Delete
+        </button>
+      </ng-template>
+    </div>
+  </div>
+</div>

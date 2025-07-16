@@ -1,0 +1,30 @@
+@import "../../../assets/styles/variables.scss";
+
+:host {
+  display: block;
+  text-align: left;
+}
+
+label {
+  .required {
+    color: $red;
+  }
+}
+
+.form {
+  position: sticky;
+}
+
+.error {
+  color: $red;
+  margin: 3px;
+  font-size: 10px;
+}
+
+.error-border {
+  border-color: $red;
+}
+
+.right-icon {
+  cursor: pointer;
+}

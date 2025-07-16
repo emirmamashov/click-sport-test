@@ -1,0 +1,20 @@
+{
+  "name": "click-sport-database",
+  "version": "1.2.0",
+  "description": "ClickSport",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "clicksport"
+  ],
+  "author": "emir.mamashov@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "glob": "^7.1.2",
+    "mongoose": "^5.10.9",
+    "mongoose-aggregate-paginate": "^2.0.1",
+    "mongoose-paginate": "^5.0.3"
+  }
+}

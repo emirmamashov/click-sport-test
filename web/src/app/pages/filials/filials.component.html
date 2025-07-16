@@ -1,0 +1,158 @@
+<h2>Филиалы</h2>
+
+<div class="table">
+  <div class="thead">
+    <div class="th">Наименование</div>
+    <div class="th">Адрес</div>
+    <div class="th">Телефон</div>
+    <div class="th">Email</div>
+    <div class="th">Город</div>
+    <div class="th status-th"></div>
+  </div>
+
+  <div *ngIf="PagesAccess.FILIALS.add" class="tr">
+    <div class="td">
+      <app-input placeholder="Имя"
+        [form]="filialAddForm"
+        fieldName="name"
+        [required]="true">
+      </app-input>
+    </div>
+    <div class="td">
+      <app-input placeholder="Адрес"
+        [form]="filialAddForm"
+        fieldName="address">
+      </app-input>
+    </div>
+    <div class="td">
+      <app-input placeholder="Телефон"
+        [form]="filialAddForm"
+        fieldName="phone">
+      </app-input>
+    </div>
+    <div class="td">
+      <app-input placeholder="Email"
+        [form]="filialAddForm"
+        fieldName="email">
+      </app-input>
+    </div>
+    <div class="td">
+      <nz-select
+        nzShowSearch
+        nzServerSearch
+        nzPlaceHolder="Введите город"
+        [(ngModel)]="selectedCityId"
+        [nzFilterOption]="nzFilterOption"
+        (nzOnSearch)="searchCities($event)"
+      >
+        <nz-option *ngFor="let city of cities" [nzLabel]="city.name" [nzValue]="city._id"></nz-option>
+      </nz-select>
+    </div>
+    <div class="td status-td btn-td">
+      <button nz-button nzType="primary"
+        (click)="add()"
+        [nzLoading]="isLoading"
+        [disabled]="filialAddForm.invalid">
+        <span nz-icon nzType="plus"></span>
+        Добавить
+      </button>
+      <button nz-button nzType="dashed" nzS
+        (click)="filialAddForm.reset();">
+        <span nz-icon nzType="highlight" nzTheme="outline"></span>
+        Очистить
+      </button>
+    </div>
+  </div>
+
+  <div *ngFor="let filial of filials"
+    class="tr edit-tr"
+    (click)="selectedClientId = filial._id || ''; selectedCityId=filial.cityId?._id">
+    <div class="td common"
+      [class.value]="selectedClientId !== filial._id">
+      @if (selectedClientId === filial._id) {
+        <app-input placeholder="Имя"
+          [required]="true"
+          [value]="filial.name"
+          (changed)="filial.name = $event">
+        </app-input>
+      } @else {
+        {{ filial.name }}
+      }
+    </div>
+
+    <div class="td"
+      [class.value]="selectedClientId !== filial._id">
+      @if (selectedClientId === filial._id) {
+        <app-input placeholder="Адрес"
+          [value]="filial.address"
+          (changed)="filial.address = $event;">
+        </app-input>
+      } @else {
+        {{ filial.address }}
+      }
+    </div>
+
+    <div class="td"
+      [class.value]="selectedClientId !== filial._id">
+      @if (selectedClientId === filial._id) {
+        <app-input placeholder="Телефон"
+          [value]="filial.phone"
+          (changed)="filial.phone = $event;">
+        </app-input>
+      } @else {
+        {{ filial.phone }}
+      }
+    </div>
+
+    <div class="td"
+      [class.value]="selectedClientId !== filial._id">
+      @if (selectedClientId === filial._id) {
+        <app-input placeholder="Email"
+          [value]="filial.email"
+          (changed)="filial.email = $event;">
+        </app-input>
+      } @else {
+        {{ filial.email }}
+      }
+    </div>
+
+    <div class="td"
+      [class.value]="selectedClientId !== filial._id">
+      @if (selectedClientId === filial._id) {
+        <nz-select
+          nzShowSearch
+          nzServerSearch
+          nzPlaceHolder="Введите город"
+          [(ngModel)]="selectedCityId"
+          [nzFilterOption]="nzFilterOption"
+          (nzOnSearch)="searchCities($event)"
+        >
+          <nz-option *ngFor="let city of cities" [nzLabel]="city.name" [nzValue]="city._id"></nz-option>
+        </nz-select>
+      } @else {
+        {{ filial.cityId?.name }}
+      }
+    </div>
+
+    <div class="td btn-td">
+      <button *ngIf="PagesAccess.FILIALS.edit"
+        nz-button
+        nzType="primary"
+        (click)="edit(filial)"
+        [nzLoading]="editLoading"
+        [disabled]="!filial.name || !filial.phone || selectedClientId !== filial._id">
+        <span nz-icon nzType="edit"></span>
+        Изменить
+      </button>
+      <button *ngIf="PagesAccess.FILIALS.delete"
+        nz-button
+        nzType="dashed"
+        nzDanger
+        (click)="remove(filial)"
+        [nzLoading]="editLoading">
+        <span nz-icon nzType="delete"></span>
+        Удалить
+      </button>
+    </div>
+  </div>
+</div>

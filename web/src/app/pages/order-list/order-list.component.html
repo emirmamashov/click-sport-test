@@ -1,0 +1,102 @@
+<div class="head">
+  <h2>Заказы</h2>
+
+  <app-input placeholder="Введите номер чека/имя/телефон/код клиента"
+    rightIcon="search"
+    (changed)="searchOrders($event);">
+  </app-input>
+</div>
+
+<div class="table">
+  <div class="thead">
+    <div class="th">Номер чека</div>
+    <div class="th">Код</div>
+    <div class="th">Клиент</div>
+    <div class="th">Город</div>
+    <div class="th">К оплате</div>
+    <div class="th">Дата</div>
+    <div class="th status-th"></div>
+  </div>
+
+  <div class="order-list">
+    <ng-container *ngFor="let order of orders">
+      <div class="tr">
+        <div class="td">
+          {{ order.checkNumber }}
+        </div>
+        <div class="td">
+          {{ order?.client?.code || '-' }}
+        </div>
+        <div class="td">
+          {{ order?.client?.name || 'Не задано' }}
+        </div>
+        <div class="td">
+          {{ order.city?.name }}
+        </div>
+        <div class="td">
+          <div *ngFor="let total of order.totalCurrencySum">
+            <b>{{ total?.sum }}</b> {{ total?.currency?.name }}
+          </div>
+        </div>
+        <div class="td">
+          {{ order.createdAt | date: 'dd-MM-YYYY HH:mm' }}
+        </div>
+        <div class="td btn-td">
+          <button *ngIf="PagesAccess.ORDERLIST.delete"
+            nz-button
+            nzType="dashed"
+            nzDanger
+            (click)="remove(order._id || '')"
+            [nzLoading]="removeLoading">
+            <span nz-icon nzType="delete"></span>
+            Удалить
+          </button>
+          <button nz-button (click)="order.showDetails = !order.showDetails">
+            <span nz-icon nzType="{{order.showDetails ? 'down' : 'up'}}"></span>
+          </button>
+          <button nz-button nz-dropdown [nzDropdownMenu]="menu">
+            <span nz-icon nzType="menu"></span>
+          </button>
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu>
+              <li nz-menu-item (click)="showCheck(order);">
+                <span nz-icon nzType="printer" nzTheme="outline"></span>
+                Печать
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+      </div>
+
+      <div *ngIf="order?.showDetails" class="details">
+        <div class="table">
+          <div class="thead">
+            <div class="th">Продажа/Покупка</div>
+            <div class="th">Валюта</div>
+            <div class="th">Сумма</div>
+            <div class="th">Обменяемая валюта</div>
+            <div class="th">Сумма</div>
+            <div class="th">Курс</div>
+          </div>
+
+          <div *ngFor="let detail of order.details" class="tr">
+            <div class="td">{{ detail.type === OrderTypes.BUY ? 'Покупка' : 'Продажа' }}</div>
+            <div class="td">{{ detail.clientCurrency?.name }}</div>
+            <div class="td">{{ detail.sum }}</div>
+            <div class="td">{{ detail.exchangeCurrency?.name }}</div>
+            <div class="td">{{ detail.exchangeSum }}</div>
+            <div class="td">{{ detail.rate }}</div>
+          </div>
+        </div>
+        <div class="info">
+          <div class="filial">
+            <b>Филиал: </b> {{ order.filial?.name }}
+          </div>
+          <div class="user">
+            <b>Менеджер: </b> {{ order.user?.name || order.user?.username }}
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

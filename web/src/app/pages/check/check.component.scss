@@ -1,0 +1,53 @@
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.content {
+  display: flex;
+  gap: 20px;
+
+  .btns {
+    display: flex;
+    gap: 5px;
+  }
+}
+
+table {
+  tr {
+    td {
+      border: 1px solid;
+      padding: 0 4px;
+    }
+
+    .title {
+      font-size: 14px;
+      font-weight: 500;
+
+      h3 {
+        margin: 0;
+        font-size: 20px;
+      }
+    }
+
+    .filial {
+      font-size: 18px;
+    }
+
+    .code {
+      font-size: 18px;
+
+      .create-date {
+        float: right;
+        margin-top: 4px;
+      }
+    }
+  }
+
+  .font16 {
+    font-size: 16px;
+  }
+}

@@ -1,0 +1,85 @@
+<div class="content">
+  <table>
+    <tbody>
+      <tr>
+        <td colspan="8" class="text-center title">
+          <h3>{{user?.company?.name}}</h3>
+          <span>
+            {{ nzOrderData.filial?.name }}: {{ nzOrderData.filial?.phone }}
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="8" class="text-center filial">
+          <b>{{ nzOrderData.filial?.name }}</b>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="8" class="code">
+          <b>КОД {{ nzOrderData.client.code }}</b>
+          <span class="create-date">{{ nzOrderData.createdAt | date: 'dd-MM-YYYY HH:mm' }}</span>
+        </td>
+      </tr>
+      <tr class="text-center">
+        <td>№</td>
+        <td>Тип</td>
+        <td>Валюта</td>
+        <td>Сумма</td>
+        <td>Валюта(обменная)</td>
+        <td>Сумма</td>
+        <td>По курсу</td>
+        <td>Статус оплаты</td>
+      </tr>
+      <tr class="text-center"
+        *ngFor="let orderDetail of nzOrderData.details">
+        <td>{{ orderDetail.number }}</td>
+        <td>{{ orderDetail.type === OrderTypes.BUY ? 'Покупка' : 'Продажа' }}</td>
+        <td>{{ orderDetail.clientCurrency?.name }}</td>
+        <td>{{ orderDetail.sum }}</td>
+        <td>{{ orderDetail.exchangeCurrency?.name }}</td>
+        <td>{{ orderDetail.exchangeSum }}</td>
+        <td>
+          {{ orderDetail.rate }}
+        </td>
+        <td>{{ orderDetail.paid ? 'Оплачено' : 'Не оплачено' }}</td>
+      </tr>
+      <tr class="font16">
+        <td colspan="3" class="text-right">
+          <b>ИТОГ:</b>
+        </td>
+        <td colspan="5">
+          <div *ngFor="let total of nzOrderData.totalCurrencySum">
+            <b>{{ total.sum }}</b> {{ total.currency.name }}
+          </div>
+        </td>
+      </tr>
+      <tr class="font16">
+        <td colspan="8">
+          Клиент: <b>{{ nzOrderData.client.name }}</b>, <b>{{ nzOrderData.client.phone }}</b>
+        </td>
+      </tr>
+      <tr class="font16">
+        <td colspan="8">
+          Город: <b>{{ nzOrderData.city?.name }}</b>
+        </td>
+      </tr>
+      <tr class="font16">
+        <td colspan="8">
+          Принял: <b>{{ nzOrderData.user?.name || nzOrderData.user?.username }}</b>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!openedPrintingWindow" class="btns">
+    <button nz-button nzType="dashed"
+      (click)="print()">
+      <span nz-icon nzType="printer" nzTheme="outline"></span>
+      Печать
+    </button>
+    <button nz-button (click)="close()">
+      <span nz-icon nzType="close" nzTheme="outline"></span>
+      Закрыть
+    </button>
+  </div>
+</div>

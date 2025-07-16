@@ -1,0 +1,62 @@
+<label *ngIf="label">
+  {{ label }}
+  <span *ngIf="required" class="required">*</span>
+</label>
+
+<div class="form">
+  <form *ngIf="fieldName && form; else noForm" [formGroup]="form">
+    <!-- <div class="btn-group {{vaiable}}">
+      <img *ngIf="icon" [src]="icon" alt="{{ label || placeholder }}" />
+      <input [type]="type || 'text'"
+        formControlName="{{ fieldName }}"
+        [class.icon-input]="icon"
+        [class.error]="(form?.get(fieldName)?.hasError('required') && form?.get(fieldName)?.touched) ||
+        (form?.get(fieldName)?.hasError('email') && form?.controls[fieldName]?.dirty)"
+        [placeholder]="placeholder"
+        [disabled]="disabled"/>
+    </div> -->
+
+    <nz-input-group [nzPrefix]="prefixTemplate"
+      [class.error-border]="(form?.get(fieldName)?.hasError('required') && form?.get(fieldName)?.touched) ||
+      (form?.get(fieldName)?.hasError('email') && form?.controls[fieldName]?.dirty)">
+      <input [type]="type || 'text'"
+        nz-input
+        formControlName="{{ fieldName }}"
+        [placeholder]="placeholder"
+        [disabled]="disabled"
+        [(ngModel)]="value"
+      />
+    </nz-input-group>
+    <ng-template #prefixTemplate><span nz-icon [nzType]="icon"></span></ng-template>
+
+    <!-- <div *ngIf="form?.get(fieldName)?.hasError('email') && form?.controls[fieldName]?.dirty" class="error">
+      Not valid format.
+    </div> -->
+
+    <div *ngIf="form?.get(fieldName)?.hasError('minlength') && form?.controls[fieldName]?.dirty" class="error">
+      Минимальная длина должна быть {{ form?.controls[fieldName].errors['minlength'].requiredLength }}.
+    </div>
+  </form>
+
+  <ng-template #noForm>
+    <nz-input-group [nzPrefix]="prefixTemplate"
+      [nzSuffix]="suffixTemplate">
+      <input [type]="type || 'text'"
+        nz-input
+        [placeholder]="placeholder"
+        [disabled]="disabled"
+        [value]="value"
+        [(ngModel)]="value"
+        (change)="onChange(value)"
+        (input)="entered.emit(value)"/>
+    </nz-input-group>
+    <ng-template #prefixTemplate><span nz-icon [nzType]="icon"></span></ng-template>
+    <ng-template #suffixTemplate>
+      <span nz-icon
+        class="right-icon"
+        [nzType]="rightIcon"
+        (click)="rightIconClick.emit(true)">
+      </span>
+    </ng-template>
+  </ng-template>
+</div>
